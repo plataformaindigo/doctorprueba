@@ -188,6 +188,25 @@ body{
     color:white;
 }
 
+.btn-inf{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:#ebf5fb;
+    color:var(--btn-violeta);
+    text-decoration:none;
+    padding:10px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:.85rem;
+    transition:all .3s ease;
+}
+
+.btn-inf:hover{
+    background:var(--btn-violeta);
+    color:white;
+}
 
 .legal-link{
     color:#6c5ce7;
@@ -268,6 +287,8 @@ h1{margin:0;font-size:1.6rem;color:var(--primary);}
 .clinic-info{font-weight:700;}
 
 .btn-wa{display:flex;justify-content:center;gap:8px;background:#ebf5fb;color:var(--btn-azul);padding:10px;border-radius:12px;text-decoration:none;margin-top:10px;}
+
+.btn-inf{display:flex;justify-content:center;gap:8px;background:#ebf5fb;color:var(--btn-violeta);padding:10px;border-radius:12px;text-decoration:none;margin-top:10px;}
 
 .back-link{margin-top:30px;display:inline-block;color:#b2bec3;cursor:pointer;}
 .footer{margin-top:35px;font-size:.75rem;color:#b2bec3;}
@@ -506,7 +527,7 @@ function renderFicha() {
                     <i class="fas fa-file-medical"></i>
                     <span>${p.nombre}</span>
                 </div>
-                <a class="btn-wa" href="${fichaProfesional.urlSolicitudInforme}&prestacion=${encodeURIComponent(p.nombre)}">
+                <a class="btn-inf" href="${fichaProfesional.urlSolicitudInforme}&prestacion=${encodeURIComponent(p.nombre)}">
                     <i class="fas fa-arrow-right"></i> Continuar
                 </a>
             `;
