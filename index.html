@@ -32,8 +32,8 @@ const fichaProfesional = {
 
 
 
-    masterPublicURL: "https://script.google.com/macros/s/XXXXX/exec",
-    masterPrivateURL: "https://script.google.com/macros/s/YYYYY/exec",
+    masterPublicURL: "https://script.google.com/macros/s/AKfycbzfX0sMBTCGak0g3Nl6atPIuQvWQu_f3Ly8vzs_D7q2Ba7KBAx9zZA5zZMo9G4TeXkT_Q/exec",
+    masterPrivateURL: "https://script.google.com/macros/s/AKfycbzfX0sMBTCGak0g3Nl6atPIuQvWQu_f3Ly8vzs_D7q2Ba7KBAx9zZA5zZMo9G4TeXkT_Q/exec",
 
 
 
@@ -332,6 +332,20 @@ h1{margin:0;font-size:1.6rem;color:var(--primary);}
 
 .view{display:none;}
 .view.active{display:block;}
+
+/* === TRÁMITES – forzar verde === */
+
+.btn-inf.btn-tramite{
+    background:#e9f7ef;
+    color:var(--btn-verde);
+}
+
+.btn-inf.btn-tramite:hover{
+    background:var(--btn-verde);
+    color:white;
+}
+
+
 </style>
 </head>
 
@@ -347,21 +361,21 @@ h1{margin:0;font-size:1.6rem;color:var(--primary);}
 <div class="container">
 
 <div class="login-profesional-container">
-
+    <i class="fas fa-key icon-lock"></i>
     <select id="loginPrestaciones"
             class="login-profesional-select"
             onchange="if(this.value) window.location.href=this.value">
-        <option value="" selected disabled>INGRESO – PRÁCTICAS</option>
+        <option value="" selected disabled>INGRESO · INFORMES</option>
     </select>
 
+    <i class="fas fa-key icon-lock" style="margin-left:8px"></i>
     <select id="loginTramites"
             class="login-profesional-select"
-            style="margin-left:6px"
             onchange="if(this.value) window.location.href=this.value">
-        <option value="" selected disabled>INGRESO – TRÁMITES</option>
+        <option value="" selected disabled>INGRESO · TRÁMITES</option>
     </select>
-
 </div>
+
 
 
 <div class="header-card">
@@ -391,9 +405,10 @@ h1{margin:0;font-size:1.6rem;color:var(--primary);}
   </a>
 
   <a href="#" class="btn btn-informe" onclick="showView('prestaciones')">
-    <span><i class="far fa-calendar-check"></i> Solicitar Informe</span>
+    <span><i class="fas fa-file-alt"></i> Solicitar Informe</span>
     <i class="fas fa-chevron-right"></i>
   </a>
+
 
   <a href="#" class="btn btn-med" onclick="showView('tramites')">
     <span><i class="fas fa-print"></i> Trámite Administrativo</span>
@@ -641,10 +656,10 @@ function renderFicha() {
                     <i class="fas fa-file-medical"></i>
                     <span>${t.nombre}</span>
                 </div>
-                <a class="btn-inf"
-                   href="${fichaProfesional.masterPublicURL}?page=solicitud&medico=${t.medico}">
-                    <i class="fas fa-arrow-right"></i> Continuar
-                </a>
+		<a class="btn-inf btn-tramite"
+   		   href="${fichaProfesional.masterPublicURL}?page=solicitud&medico=${t.medico}">
+                    <i class="fas fa-file-alt"></i>Continuar 
+	</a>
             `;
             contenedorTramites.appendChild(div);
         });
