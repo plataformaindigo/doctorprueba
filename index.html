@@ -32,15 +32,12 @@ const fichaProfesional = {
 
 
 
+    masterPublicURL: "https://script.google.com/macros/s/XXXXX/exec",
+    masterPrivateURL: "https://script.google.com/macros/s/YYYYY/exec",
 
 
 
-
-
-    urlIngresoProfesional: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=profesional&medico=zdoctorprueba", //aqui solo deberia terminar en exec
-
-    urlSolicitudInforme: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=solicitud&medico=zdoctorprueba", //aqui solo deberia terminar en exec
-
+   
     consultorios: [
         {
             nombre: "Consultorio Particular",
@@ -52,20 +49,21 @@ const fichaProfesional = {
         }
     ],
 
-    prestaciones: [
-        {
-            nombre: "Ecocardio Doppler Color",
-            link: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba" //aqui debería ir solo page=solicitud&medico=zpruebaecocardio
-        },
-        {
-            nombre: "Electrocardiograma",
-            link: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba" //aqui debería ir solo page=solicitud&medico=zpruebaecg
-        },
-        {
-            nombre: "Pedido Médico",
-            link: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorpruebapmospat" //aqui debería ir solo page=solicitud&medico=zpruebaecg
-        }
-    ]
+prestaciones: [
+    {
+        nombre: "Ecocardio Doppler Color",
+        medico: "zdoctorpruebaecocardio"
+    },
+    {
+        nombre: "Electrocardiograma",
+        medico: "zdoctorpruebaecg"
+    },
+    {
+        nombre: "Pedido Médico OSPAT",
+        medico: "zdoctorpruebapmospat"
+    }
+]
+
 
 };
 
@@ -522,17 +520,20 @@ function renderFicha() {
     }
 
 const selectLogin = document.getElementById("loginProfesional");
+
 if (selectLogin) {
-    // Reiniciamos el selector con el título
     selectLogin.innerHTML = '<option value="" selected disabled>INGRESO PROFESIONAL</option>';
     
-    // Creamos un acceso por cada prestación (cada habitación)
     fichaProfesional.prestaciones.forEach(p => {
         const option = document.createElement("option");
         
-        // Usamos la URL base de ingreso y le pasamos la prestación como parámetro
-        // para que el sistema sepa a qué "habitación" entrar.
-        option.value = `${fichaProfesional.urlIngresoProfesional}&prestacion=${encodeURIComponent(p.nombre)}`;
+        // Construcción uniforme para todos:
+        // masterURL + ?page=profesional + &medico= + el parámetro
+        option.value = `${fichaProfesional.masterPrivateURL}?page=profesional&medico=${p.medico}`;
+
+
+
+        
         option.textContent = p.nombre;
         selectLogin.appendChild(option);
     });
@@ -546,25 +547,27 @@ if (selectLogin) {
 
         contenedorConsultorios.innerHTML = "";
 
-        fichaProfesional.consultorios.forEach((c, index) => {
+fichaProfesional.consultorios.forEach((c, index) => {
 
-            const icono = index === 0
-                ? '<i class="fas fa-door-open"></i>'
-                : '<i class="fas fa-hospital"></i>';
+    const icono = index === 0
+        ? '<i class="fas fa-door-open"></i>'
+        : '<i class="fas fa-hospital"></i>';
 
-            const div = document.createElement("div");
-            div.className = "grid-item";
-            div.innerHTML = `
-                <div class="clinic-info">
-                    ${icono}
-                    <span>${c.nombre}</span>
-                </div>
-                <a class="btn-wa" href="${c.telefono}">
-                    <i class="fab fa-whatsapp"></i> Solicitar Turno
-                </a>
-            `;
-            contenedorConsultorios.appendChild(div);
-        });
+    const div = document.createElement("div");
+    div.className = "grid-item";
+    div.innerHTML = `
+        <div class="clinic-info">
+            ${icono}
+            <span>${c.nombre}</span>
+        </div>
+        <a class="btn-wa" href="${c.telefono}">
+            <i class="fab fa-whatsapp"></i> Solicitar Turno
+        </a>
+    `;
+
+    contenedorConsultorios.appendChild(div);
+});
+
     }
 
 
@@ -584,9 +587,10 @@ if (selectLogin) {
                     <i class="fas fa-file-medical"></i>
                     <span>${p.nombre}</span>
                 </div>
-                <a class="btn-inf" href="${fichaProfesional.urlSolicitudInforme}&prestacion=${encodeURIComponent(p.nombre)}">
-                    <i class="fas fa-arrow-right"></i> Continuar
-                </a>
+<a class="btn-inf" href="${fichaProfesional.masterPublicURL}?page=solicitud&medico=${p.medico}">
+    <i class="fas fa-arrow-right"></i> Continuar
+</a>
+
             `;
             contenedorPrestaciones.appendChild(div);
         });
