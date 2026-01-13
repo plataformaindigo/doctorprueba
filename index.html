@@ -37,9 +37,9 @@ const fichaProfesional = {
 
 
 
-    urlIngresoProfesional: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=profesional&medico=zdoctorprueba",
+    urlIngresoProfesional: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=profesional&medico=zdoctorprueba", //aqui solo deberia terminar en exec
 
-    urlSolicitudInforme: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=solicitud&medico=zdoctorprueba",
+    urlSolicitudInforme: "https://script.google.com/macros/s/AKfycbzQ3RWYLNgy2X9qi5wIX1mrxCBVUDlMEPJ7eGgh3ZcrZj1qMG2xu0XhLNRprz3IRN_9kA/exec?page=solicitud&medico=zdoctorprueba", //aqui solo deberia terminar en exec
 
     consultorios: [
         {
@@ -55,11 +55,11 @@ const fichaProfesional = {
     prestaciones: [
         {
             nombre: "Ecocardio Doppler Color",
-            prestacion: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba"
+            link: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba" //aqui debería ir solo page=solicitud&medico=zpruebaecocardio
         },
         {
             nombre: "Electrocardiograma",
-            prestacion: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba"
+            link: "https://script.google.com/macros/s/AKfycbxJU9kYmLXQoassPI16NWUzR54qerIctLkta7jaRPjUmUuwdfqg5g055ekaVwPz0msOkg/exec?page=solicitud&medico=zdoctorprueba" //aqui debería ir solo page=solicitud&medico=zpruebaecg
         }
     ]
 
@@ -134,6 +134,40 @@ body{
     color:var(--primary);
 }
 
+   .login-profesional-container {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 2px 10px;
+}
+
+.login-profesional-select {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 6px 5px;
+    cursor: pointer;
+    outline: none;
+    appearance: none; /* Quita la flecha por defecto en algunos navegadores */
+}
+
+.login-profesional-select option {
+    color: var(--text); /* Para que las opciones sean legibles en el despliegue */
+}
+
+.icon-lock {
+    color: white;
+    font-size: 0.7rem;
+}
 
 .btn{
     display:flex;
@@ -309,9 +343,12 @@ h1{margin:0;font-size:1.6rem;color:var(--primary);}
 
 <div class="container">
 
-<a id="loginProfesional" class="login-profesional">
-<i class="fas fa-lock"></i> INGRESO PROFESIONAL
-</a>
+<div class="login-profesional-container">
+    <i class="fas fa-key icon-lock"></i>
+    <select id="loginProfesional" class="login-profesional-select" onchange="if(this.value) window.location.href=this.value">
+        <option value="" selected disabled>INGRESO PROFESIONAL</option>
+        </select>
+</div>
 
 <div class="header-card">
 <img id="fotoPerfil" class="profile-pic">
@@ -480,7 +517,22 @@ function renderFicha() {
         document.getElementById("fotoPerfil").src = fichaProfesional.fotoPerfil;
     }
 
-    document.getElementById("loginProfesional").href = fichaProfesional.urlIngresoProfesional;
+const selectLogin = document.getElementById("loginProfesional");
+if (selectLogin) {
+    // Reiniciamos el selector con el título
+    selectLogin.innerHTML = '<option value="" selected disabled>INGRESO PROFESIONAL</option>';
+    
+    // Creamos un acceso por cada prestación (cada habitación)
+    fichaProfesional.prestaciones.forEach(p => {
+        const option = document.createElement("option");
+        
+        // Usamos la URL base de ingreso y le pasamos la prestación como parámetro
+        // para que el sistema sepa a qué "habitación" entrar.
+        option.value = `${fichaProfesional.urlIngresoProfesional}&prestacion=${encodeURIComponent(p.nombre)}`;
+        option.textContent = p.nombre;
+        selectLogin.appendChild(option);
+    });
+}
 
 
     /* ===== CONSULTORIOS ===== */
